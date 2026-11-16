@@ -13,7 +13,7 @@ Debian 12 (bookworm) · Linux 6.1 LTS (Debian kernel) · GRUB (BIOS + UEFI) · s
 - **On Debian 12 as root:** `./scripts/build-iso.sh`
 
 ## Preview the desktop (no ISO)
-Double-click `start-os.command` (or `./scripts/preview.sh start`). It opens http://localhost:6080; VNC: `vnc://localhost:5901`, password `dilshan`.
+Double-click `start-os.command` (or `./scripts/preview.sh start`). It opens http://localhost:6080; VNC: `vnc://127.0.0.1:5901`, password `dilshan`.
 Stop with `stop-os.command` (or `./scripts/preview.sh stop --all`). Also: `status`, `logs`.
 
 ## Develop without building an ISO

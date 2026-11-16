@@ -28,7 +28,7 @@ start() {
   done
   echo
   echo "Browser: $URL"
-  echo "VNC app: vnc://localhost:5901 (password: dilshan)"
+  echo "VNC app: vnc://127.0.0.1:5901 (password: dilshan)"
   command -v open >/dev/null && open "$URL" || true
 }
 
