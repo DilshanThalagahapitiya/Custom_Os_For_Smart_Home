@@ -8,6 +8,12 @@
           <property name="last-image" type="string" value="/usr/share/backgrounds/dilshan/default.svg"/>
         </property>
       </property>
+      <property name="monitorVNC-0" type="empty">
+        <property name="workspace0" type="empty">
+          <property name="image-style" type="int" value="5"/>
+          <property name="last-image" type="string" value="/usr/share/backgrounds/dilshan/default.svg"/>
+        </property>
+      </property>
       <property name="monitorVirtual-1" type="empty">
         <property name="workspace0" type="empty">
           <property name="image-style" type="int" value="5"/>

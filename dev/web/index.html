@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Dilshan OS</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root { --bg:#0f172a; --fg:#e2e8f0; --muted:#94a3b8; --accent:#3b82f6; }
+  * { box-sizing:border-box } html,body { height:100%; margin:0; background:var(--bg); color:var(--fg); font-family:Inter,system-ui,sans-serif }
+  .screen { position:fixed; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:20px; background:var(--bg); transition:opacity .6s }
+  .screen.hidden { opacity:0; pointer-events:none }
+  h1 { font-size:42px; font-weight:600; margin:0; letter-spacing:.5px }
+  .bar { width:260px; height:6px; border-radius:3px; background:#1e293b; overflow:hidden }
+  .bar i { display:block; height:100%; width:0; background:var(--accent); transition:width .4s }
+  p { margin:0; color:var(--muted); font-size:14px }
+  iframe { position:fixed; inset:0; width:100%; height:100%; border:0 }
+  #power { position:fixed; top:10px; right:10px; z-index:5; padding:8px 14px; border:0; border-radius:999px;
+           background:#dc2626; color:#fff; font:600 13px Inter,system-ui,sans-serif; cursor:pointer; opacity:.85 }
+  #power:hover { opacity:1 }
+</style></head><body>
+<iframe id="vnc" title="Desktop"></iframe>
+<button id="power" hidden>⏻ Shut down</button>
+
+<div class="screen" id="boot"><h1>Dilshan OS</h1><div class="bar"><i id="fill"></i></div><p id="msg">Starting…</p></div>
+<div class="screen hidden" id="off"><h1>Shutting down…</h1><p id="offmsg">Closing your session</p></div>
+
+<script>
+const $ = id => document.getElementById(id);
+let started = false;
+
+async function poll() {
+  try {
+    const s = await (await fetch('/status')).json();
+    $('fill').style.width = s.desktop ? '100%' : s.display ? '60%' : '25%';
+    $('msg').textContent = s.desktop ? 'Welcome' : s.display ? 'Loading desktop…' : 'Starting display…';
+    if (s.desktop && !started) { started = true; setTimeout(showDesktop, 1500); return; }
+  } catch (e) { $('msg').textContent = 'Waiting for system…'; }
+  if (!started) setTimeout(poll, 1000);
+}
+
+function showDesktop() {
+  $('vnc').src = 'http://localhost:6081/vnc.html?autoconnect=1&resize=scale';
+  $('power').hidden = false;
+  $('boot').classList.add('hidden');
+}
+
+$('power').onclick = async () => {
+  if (!confirm('Shut down Dilshan OS?')) return;
+  $('off').classList.remove('hidden');
+  $('power').hidden = true;
+  try { await fetch('/shutdown', { method: 'POST' }); } catch (e) {}
+  setTimeout(() => {
+    $('vnc').src = 'about:blank';
+    document.querySelector('#off h1').textContent = 'Powered off';
+    $('offmsg').textContent = 'Run ./scripts/dev-desktop.sh to start again';
+  }, 3000);
+};
+poll();
+</script></body></html>
