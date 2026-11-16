@@ -6,7 +6,18 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 VERSION="$(tr -d '[:space:]' < "$ROOT/VERSION")"
 WORK="${WORK_DIR:-$ROOT/build/work}"
 OUT="${OUT_DIR:-$ROOT/dist}"
-ISO_NAME="dilshan-os-${VERSION}-amd64.iso"
+# PROFILE=desktop (default): 64-bit XFCE desktop. PROFILE=lite: 32-bit console image for browser emulators.
+PROFILE="${PROFILE:-desktop}"
+case "$PROFILE" in
+  desktop)
+    CONFIG_DIR="$ROOT/build/live-build"; ARCH=amd64; FLAVOUR=amd64; BOOTLOADERS="grub-pc,grub-efi"
+    APPEND="boot=live components quiet hostname=dilshan-os locales=en_US.UTF-8 keyboard-layouts=us" ;;
+  lite)
+    CONFIG_DIR="$ROOT/build/live-build-lite"; ARCH=i386; FLAVOUR=686; BOOTLOADERS="syslinux"
+    APPEND="boot=live components hostname=dilshan-lite locales=en_US.UTF-8 keyboard-layouts=us" ;;
+  *) echo "Unknown PROFILE '$PROFILE' (desktop|lite)" >&2; exit 1 ;;
+esac
+ISO_NAME="dilshan-os-${PROFILE}-${VERSION}-${ARCH}.iso"
 
 [ "$(id -u)" -eq 0 ] || { echo "Run as root (or via scripts/build-in-docker.sh)" >&2; exit 1; }
 
@@ -24,33 +35,35 @@ SOURCE_DATE_EPOCH="$(git -C "$ROOT" log -1 --format=%ct 2>/dev/null || echo 1700
 export SOURCE_DATE_EPOCH
 
 rm -rf "$WORK" && mkdir -p "$WORK" "$OUT"
-cp -a "$ROOT/build/live-build/." "$WORK/"
+cp -a "$CONFIG_DIR/." "$WORK/"
 mkdir -p "$WORK/config/includes.chroot/usr/lib"
 sed "s/@VERSION@/${VERSION}/g" "$ROOT/branding/os-release.in" \
   > "$WORK/config/includes.chroot/usr/lib/os-release"
 
-# Python tools go to the system site-packages
+# Python tools go to the system site-packages (desktop only)
+[ "$PROFILE" = desktop ] && {
 PYDEST="$WORK/config/includes.chroot/usr/lib/python3/dist-packages"
 mkdir -p "$PYDEST"
 cp -a "$ROOT/src/dilshan" "$PYDEST/"
 find "$PYDEST" -name __pycache__ -prune -exec rm -rf {} +
+}
 
 cd "$WORK"
 lb config \
   --mode debian \
   --distribution bookworm \
-  --architectures amd64 \
-  --linux-flavours amd64 \
+  --architectures "$ARCH" \
+  --linux-flavours "$FLAVOUR" \
   --archive-areas "main contrib non-free-firmware" \
   --binary-images iso-hybrid \
-  --bootloaders "grub-pc,grub-efi" \
+  --bootloaders "$BOOTLOADERS" \
   --debian-installer none \
   --apt-recommends false \
   --memtest none \
   --iso-application "Dilshan OS" \
   --iso-volume "DILSHAN_OS" \
   --iso-publisher "Dilshan OS project" \
-  --bootappend-live "boot=live components quiet hostname=dilshan-os locales=en_US.UTF-8 keyboard-layouts=us"
+  --bootappend-live "$APPEND"
 lb build
 
 ISO="$(ls "$WORK"/*.iso | head -n1)"

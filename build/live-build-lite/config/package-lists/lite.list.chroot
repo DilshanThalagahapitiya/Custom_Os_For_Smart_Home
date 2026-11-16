@@ -1,0 +1,9 @@
+# Small 32-bit console image for browser emulators (v86). No desktop.
+sudo
+nano
+htop
+curl
+ca-certificates
+iproute2
+isc-dhcp-client
+systemd-zram-generator

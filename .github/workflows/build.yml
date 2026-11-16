@@ -35,6 +35,20 @@ jobs:
           path: dist/
           retention-days: 14
 
+  build-lite:
+    needs: [lint, unit-tests]
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build 32-bit lite ISO in Debian 12 container
+        run: docker run --rm --privileged -e PROFILE=lite -v "$PWD:/src" -w /src debian:bookworm ./scripts/build-iso.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dilshan-os-lite-iso
+          path: dist/
+          retention-days: 14
+
   boot-test:
     needs: build
     runs-on: ubuntu-latest
