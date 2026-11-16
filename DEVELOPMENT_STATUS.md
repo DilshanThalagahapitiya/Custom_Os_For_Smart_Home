@@ -28,6 +28,9 @@
 - Measure ISO size, idle RAM and boot time
 - 4 GB / 8 GB and single-core boot tests
 
+## Nano images (side project for small/browser testing)
+- `PROFILE=nano` (12 MB, text) and `PROFILE=nano-gui` (54 MB, Xorg + JWM) built locally and booted in QEMU i386; nano-gui reaches the desktop. Not tested in v86.
+
 ## Latest successful ISO build
 None.
 

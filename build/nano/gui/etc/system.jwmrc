@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<JWM>
+  <RootMenu onroot="3">
+    <Program label="Terminal">xterm</Program>
+    <Restart label="Restart desktop"/>
+    <Program label="Power off">poweroff</Program>
+  </RootMenu>
+  <Tray x="0" y="-1" height="32" autohide="off">
+    <TrayButton label="Dilshan OS">root:1</TrayButton>
+    <TrayButton label="Terminal">exec:xterm</TrayButton>
+    <TaskList maxwidth="256"/>
+    <Dock/>
+    <Clock format="%H:%M"/>
+  </Tray>
+  <Desktops width="1" height="1">
+    <Background type="gradient">#0f172a:#1e3a8a</Background>
+  </Desktops>
+  <WindowStyle>
+    <Font>Sans-10</Font>
+  </WindowStyle>
+</JWM>

@@ -3,5 +3,5 @@
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SCRIPT=./scripts/build-iso.sh
-[ "${PROFILE:-}" = nano ] && SCRIPT=./scripts/build-nano.sh
+case "${PROFILE:-}" in nano|nano-gui) SCRIPT=./scripts/build-nano.sh ;; esac
 docker run --rm --privileged -e FAST -e PROFILE -e WORK_DIR=/var/tmp/dilshan-work -v "$ROOT:/src" -w /src debian:bookworm "$SCRIPT"

@@ -7,6 +7,9 @@ The normal Dilshan OS ISO is 64-bit (`amd64`) and **cannot boot there**. Use the
 `PROFILE=nano ./scripts/build-in-docker.sh` builds `dist/dilshan-os-nano-<version>-i386.iso` in about a minute (Alpine kernel + BusyBox, no Debian).
 It boots to a root shell in QEMU i386. Upload it in the CD-ROM slot of the emulator as described below.
 
+## Nano GUI (about 54 MB): graphical, light
+`PROFILE=nano-gui ./scripts/build-in-docker.sh` adds Xorg and the JWM window manager (panel, menu, clock, xterm). Needs an x86-64 host or the x86 colima VM. Tested in QEMU i386 with 512 MB RAM (desktop reached); needs at least 512 MB, and the browser emulator may be slow.
+
 ## Or build the Debian-based lite ISO
 1. Push to GitHub, open **Actions**, pick the latest run.
 2. Download the artifact **dilshan-os-lite-iso** and unzip it. You get `dilshan-os-lite-<version>-i386.iso`.
