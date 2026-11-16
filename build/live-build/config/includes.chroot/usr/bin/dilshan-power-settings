@@ -1,0 +1,4 @@
+#!/usr/bin/python3
+from dilshan.apps.power_settings import main
+
+main()

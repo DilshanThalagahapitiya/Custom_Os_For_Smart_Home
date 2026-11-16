@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Power Settings
+Comment=Battery and power mode
+Exec=dilshan-power-settings
+Icon=preferences-system-power
+Categories=Settings;System;

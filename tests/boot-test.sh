@@ -26,6 +26,9 @@ trap 'kill $QPID 2>/dev/null || true' EXIT
 
 for ((t = 0; t < TIMEOUT; t += 5)); do
   if grep -q DILSHAN_BOOT_OK "$SERIAL"; then
+    sleep 3
+    grep -q zram0 "$SERIAL" || { echo "FAIL: zram swap not active" >&2; cat "$SERIAL" >&2; exit 1; }
+    cat "$SERIAL"
     echo "PASS: $MODE ${RAM}MB booted to graphical.target in ~${t}s"
     echo "screendump $SHOT" | socat - "UNIX-CONNECT:$MON" >/dev/null 2>&1 || true
     sleep 1; exit 0

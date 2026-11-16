@@ -6,8 +6,15 @@
 - Basic theme, wallpaper, OS name in `os-release`/issue/installer text
 - GitHub Actions: lint → build ISO → QEMU boot test (BIOS, UEFI, 2 GB RAM, 2 CPUs)
 
+## Phase 2: Performance (written, NOT verified)
+- zram swap, sysctl tuning, earlyoom, power-profiles-daemon, wait-online masked
+- Memory Monitor and Power Settings GTK apps (`src/dilshan`)
+- Boot test now also requires zram swap to be active
+- Not done yet: optional disk swap, memory-leak monitoring, thermal/fan display, hibernate, measured targets
+
 ### Verified
-Nothing yet. No ISO has been built or booted.
+- 10 Python unit tests for memory/power parsing pass locally (`tests/unit`).
+- ISO build and VM boot: nothing yet. No ISO has been built or booted.
 
 ### Known issues / risks
 - Installer shortcut is copied to `/etc/skel/Desktop`, so installed users also get it.

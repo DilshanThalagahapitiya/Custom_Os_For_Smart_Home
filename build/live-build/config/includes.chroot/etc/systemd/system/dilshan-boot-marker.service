@@ -6,7 +6,7 @@ ConditionPathExists=/dev/ttyS0
 
 [Service]
 Type=oneshot
-ExecStart=/bin/sh -c 'echo DILSHAN_BOOT_OK > /dev/ttyS0'
+ExecStart=/usr/lib/dilshan/boot-marker
 
 [Install]
 WantedBy=graphical.target

@@ -29,6 +29,12 @@ mkdir -p "$WORK/config/includes.chroot/usr/lib"
 sed "s/@VERSION@/${VERSION}/g" "$ROOT/branding/os-release.in" \
   > "$WORK/config/includes.chroot/usr/lib/os-release"
 
+# Python tools go to the system site-packages
+PYDEST="$WORK/config/includes.chroot/usr/lib/python3/dist-packages"
+mkdir -p "$PYDEST"
+cp -a "$ROOT/src/dilshan" "$PYDEST/"
+find "$PYDEST" -name __pycache__ -prune -exec rm -rf {} +
+
 cd "$WORK"
 lb config \
   --mode debian \

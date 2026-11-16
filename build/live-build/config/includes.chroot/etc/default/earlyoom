@@ -1,0 +1,2 @@
+# Act only when both RAM and swap are nearly exhausted (<5% free); never kill core services
+EARLYOOM_ARGS="-r 3600 -m 5 -s 5 --avoid '(^|/)(systemd|Xorg|lightdm|NetworkManager|sshd)$'"

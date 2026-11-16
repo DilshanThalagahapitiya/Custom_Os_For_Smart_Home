@@ -1,0 +1,8 @@
+#!/bin/sh
+# Prints boot facts to the serial port so CI logs record real measurements.
+exec > /dev/ttyS0 2>&1
+echo DILSHAN_BOOT_OK
+systemd-analyze 2>/dev/null | head -n1
+free -m
+swapon --show
+for s in earlyoom power-profiles-daemon; do echo "$s: $(systemctl is-active $s)"; done

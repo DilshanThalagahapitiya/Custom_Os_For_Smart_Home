@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Memory Monitor
+Comment=Show RAM, swap, ZRAM and memory pressure
+Exec=dilshan-memory-monitor
+Icon=utilities-system-monitor
+Categories=Settings;System;

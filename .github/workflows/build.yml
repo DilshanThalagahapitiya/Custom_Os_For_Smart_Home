@@ -13,8 +13,14 @@ jobs:
       - uses: actions/checkout@v4
       - run: shellcheck scripts/*.sh tests/*.sh build/live-build/config/hooks/live/*
 
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: PYTHONPATH=src python3 -m unittest discover -s tests/unit -v
+
   build:
-    needs: lint
+    needs: [lint, unit-tests]
     runs-on: ubuntu-latest
     timeout-minutes: 90
     steps:
