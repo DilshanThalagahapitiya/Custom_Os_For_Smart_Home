@@ -20,6 +20,7 @@ xdg-user-dirs
 pipewire-audio
 pavucontrol
 firefox-esr
+flatpak
 # Look and feel
 arc-theme
 papirus-icon-theme

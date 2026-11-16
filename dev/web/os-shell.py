@@ -6,8 +6,10 @@ import subprocess
 import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+from urllib.parse import parse_qs, urlparse
 
 WEB = Path(__file__).parent
+UPLOADS = Path("/root/Uploads")
 
 
 def port_open(port: int) -> bool:
@@ -36,12 +38,29 @@ class Handler(BaseHTTPRequestHandler):
             self._send((WEB / "index.html").read_bytes())
 
     def do_POST(self):
-        if self.path != "/shutdown":
+        url = urlparse(self.path)
+        if url.path == "/upload":
+            return self._upload(parse_qs(url.query).get("name", ["file"])[0])
+        if url.path != "/shutdown":
             return self._send(b"not found", "text/plain", 404)
         self._send(b"{}", "application/json")
         # Close the session cleanly, then end the container (this process is PID 1)
         subprocess.run(["xfce4-session-logout", "--logout"], capture_output=True, timeout=5)
         threading.Timer(2.0, lambda: os._exit(0)).start()
+
+    def _upload(self, name: str) -> None:
+        """Save an uploaded file to ~/Uploads inside the preview so App Installer can use it."""
+        UPLOADS.mkdir(parents=True, exist_ok=True)
+        target = UPLOADS / (Path(name).name or "file")
+        remaining = int(self.headers.get("Content-Length", 0))
+        with target.open("wb") as out:
+            while remaining > 0:
+                chunk = self.rfile.read(min(1 << 20, remaining))
+                if not chunk:
+                    break
+                out.write(chunk)
+                remaining -= len(chunk)
+        self._send(json.dumps({"saved": target.name}).encode(), "application/json")
 
     def log_message(self, *args):
         pass

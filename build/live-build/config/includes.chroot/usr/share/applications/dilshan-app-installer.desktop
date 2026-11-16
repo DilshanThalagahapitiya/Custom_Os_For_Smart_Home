@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=App Installer
+Comment=Install Flutter, Windows and Linux apps from a file
+Exec=dilshan-app-installer
+Icon=system-software-install
+Categories=Settings;System;

@@ -1,0 +1,4 @@
+#!/usr/bin/python3
+from dilshan.apps.app_installer import main
+
+main()
