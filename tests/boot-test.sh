@@ -15,7 +15,7 @@ args=(-m "$RAM" -smp "$CPUS" -cdrom "$ISO" -boot d -vga std -display none
 if [ -w /dev/kvm ]; then args+=(-enable-kvm -cpu host); else args+=(-cpu max); fi
 
 if [ "$MODE" = uefi ]; then
-  FW="$(ls /usr/share/ovmf/OVMF.fd /usr/share/OVMF/OVMF.fd 2>/dev/null | head -n1)"
+  FW="$(find /usr/share/ovmf /usr/share/OVMF -name OVMF.fd 2>/dev/null | head -n1)"
   [ -n "$FW" ] || { echo "OVMF firmware not found" >&2; exit 2; }
   args+=(-bios "$FW")
 fi

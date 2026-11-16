@@ -66,7 +66,7 @@ lb config \
   --bootappend-live "$APPEND"
 lb build
 
-ISO="$(ls "$WORK"/*.iso | head -n1)"
+ISO="$(find "$WORK" -maxdepth 1 -name '*.iso' | head -n1)"
 mv "$ISO" "$OUT/$ISO_NAME"
 (cd "$OUT" && sha256sum "$ISO_NAME" > "$ISO_NAME.sha256")
 echo "Built: $OUT/$ISO_NAME ($(du -h "$OUT/$ISO_NAME" | cut -f1))"
