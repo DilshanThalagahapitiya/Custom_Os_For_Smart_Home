@@ -12,6 +12,9 @@ Debian 12 (bookworm) · Linux 6.1 LTS (Debian kernel) · GRUB (BIOS + UEFI) · s
 - **Locally (Docker, x86-64 host):** `./scripts/build-in-docker.sh` → `dist/dilshan-os-<version>-amd64.iso` + `.sha256`
 - **On Debian 12 as root:** `./scripts/build-iso.sh`
 
+## Develop without building an ISO
+`./scripts/dev-web.sh memory_monitor` (or `power_settings`) runs the GTK app in a container and shows it at http://localhost:8085. Your `src/` folder is mounted live: edit, close the app window, and it reloads. Needs Docker (colima) running.
+
 ## Test
 `tests/boot-test.sh dist/*.iso bios|uefi 2048 2` boots the ISO in QEMU and waits for the guest to report it reached the graphical target.
 
