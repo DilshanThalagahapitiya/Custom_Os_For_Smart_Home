@@ -1,0 +1,7 @@
+::sysinit:/bin/mount -t proc proc /proc
+::sysinit:/bin/mount -t sysfs sys /sys
+::sysinit:/bin/mount -t devtmpfs dev /dev
+::sysinit:/bin/hostname dilshan-nano
+tty1::respawn:/bin/login -f root
+::ctrlaltdel:/sbin/reboot
+::shutdown:/bin/umount -a -r

@@ -1,0 +1,5 @@
+NAME="Dilshan OS Nano"
+PRETTY_NAME="Dilshan OS Nano @VERSION@"
+VERSION_ID="@VERSION@"
+ID=dilshan-nano
+HOME_URL="https://github.com/"
