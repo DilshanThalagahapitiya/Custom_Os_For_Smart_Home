@@ -48,6 +48,9 @@ cp -a "$ROOT/src/dilshan" "$PYDEST/"
 find "$PYDEST" -name __pycache__ -prune -exec rm -rf {} +
 }
 
+# FAST=1: gzip squashfs. Builds much sooner, ISO is larger. Use for test builds.
+COMPRESSION="xz"; [ "${FAST:-0}" = 1 ] && COMPRESSION="gzip"
+
 cd "$WORK"
 lb config \
   --mode debian \
@@ -58,6 +61,7 @@ lb config \
   --binary-images iso-hybrid \
   --bootloaders "$BOOTLOADERS" \
   --debian-installer none \
+  --chroot-squashfs-compression-type "$COMPRESSION" \
   --apt-recommends false \
   --memtest none \
   --iso-application "Dilshan OS" \

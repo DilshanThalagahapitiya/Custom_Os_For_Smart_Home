@@ -28,21 +28,20 @@ jobs:
       - name: Free disk space
         run: sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/lib/android
       - name: Build ISO in Debian 12 container
-        run: ./scripts/build-in-docker.sh
+        run: FAST=1 ./scripts/build-in-docker.sh
       - uses: actions/upload-artifact@v4
         with:
           name: dilshan-os-iso
           path: dist/
           retention-days: 14
 
-  build-lite:
-    needs: [lint, unit-tests]
+  build-lite:  # no dependencies: starts immediately
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
       - name: Build 32-bit lite ISO in Debian 12 container
-        run: docker run --rm --privileged -e PROFILE=lite -v "$PWD:/src" -w /src debian:bookworm ./scripts/build-iso.sh
+        run: docker run --rm --privileged -e FAST=1 -e PROFILE=lite -v "$PWD:/src" -w /src debian:bookworm ./scripts/build-iso.sh
       - uses: actions/upload-artifact@v4
         with:
           name: dilshan-os-lite-iso
