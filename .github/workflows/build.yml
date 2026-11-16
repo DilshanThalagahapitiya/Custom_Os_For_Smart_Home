@@ -1,0 +1,57 @@
+name: Build and test ISO
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: shellcheck scripts/*.sh tests/*.sh build/live-build/config/hooks/live/*
+
+  build:
+    needs: lint
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - name: Free disk space
+        run: sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/lib/android
+      - name: Build ISO in Debian 12 container
+        run: ./scripts/build-in-docker.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dilshan-os-iso
+          path: dist/
+          retention-days: 14
+
+  boot-test:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      matrix:
+        mode: [bios, uefi]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: dilshan-os-iso
+          path: dist/
+      - name: Install QEMU
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y qemu-system-x86 ovmf socat
+          [ -e /dev/kvm ] && sudo chmod 666 /dev/kvm || true
+      - name: Boot ISO (2 GB RAM, 2 CPUs)
+        run: ./tests/boot-test.sh dist/*.iso ${{ matrix.mode }} 2048 2
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: boot-test-${{ matrix.mode }}
+          path: test-output/

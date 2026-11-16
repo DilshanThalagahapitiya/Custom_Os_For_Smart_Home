@@ -1,0 +1,27 @@
+# XFCE desktop (X11) with LightDM
+xorg
+xserver-xorg-input-libinput
+xserver-xorg-video-vesa
+xserver-xorg-video-fbdev
+libgl1-mesa-dri
+lightdm
+lightdm-gtk-greeter
+xfce4
+xfce4-terminal
+xfce4-whiskermenu-plugin
+xfce4-power-manager
+xfce4-notifyd
+xfce4-pulseaudio-plugin
+thunar-volman
+gvfs
+mousepad
+dbus-x11
+xdg-user-dirs
+pipewire-audio
+pavucontrol
+firefox-esr
+# Look and feel
+arc-theme
+papirus-icon-theme
+fonts-inter
+fonts-noto-core

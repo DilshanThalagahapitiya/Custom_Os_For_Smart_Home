@@ -1,0 +1,18 @@
+#!/bin/sh
+# Branding that must run inside the chroot. Package identifiers (ID=debian) stay untouched.
+set -e
+systemctl enable dilshan-boot-marker.service
+printf '%s\n' 'Dilshan OS \n \l' > /etc/issue
+echo "Dilshan OS" > /etc/issue.net
+
+# Rebrand the installer text
+if [ -d /etc/calamares/branding ]; then
+  find /etc/calamares/branding -name branding.desc \
+    -exec sed -i 's/Debian GNU\/Linux/Dilshan OS/g; s/Debian/Dilshan OS/g' {} +
+fi
+
+# Installer shortcut on the live desktop
+mkdir -p /etc/skel/Desktop
+for f in /usr/share/applications/calamares*.desktop; do
+  [ -e "$f" ] && cp "$f" /etc/skel/Desktop/ && chmod +x "/etc/skel/Desktop/$(basename "$f")"
+done

@@ -1,0 +1,22 @@
+# Core system and hardware support
+sudo
+locales
+console-setup
+keyboard-configuration
+tzdata
+network-manager
+network-manager-gnome
+wpasupplicant
+bluez
+firmware-linux-free
+firmware-misc-nonfree
+firmware-iwlwifi
+firmware-realtek
+firmware-atheros
+firmware-amd-graphics
+intel-microcode
+amd64-microcode
+udisks2
+policykit-1
+pciutils
+usbutils
