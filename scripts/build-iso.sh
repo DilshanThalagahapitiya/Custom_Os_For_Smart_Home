@@ -8,12 +8,15 @@ WORK="${WORK_DIR:-$ROOT/build/work}"
 OUT="${OUT_DIR:-$ROOT/dist}"
 # PROFILE=desktop (default): 64-bit XFCE desktop. PROFILE=lite: 32-bit console image for browser emulators.
 PROFILE="${PROFILE:-desktop}"
+EXTRA_LB_ARGS=()
 case "$PROFILE" in
   desktop)
     CONFIG_DIR="$ROOT/build/live-build"; ARCH=amd64; FLAVOUR=amd64; BOOTLOADERS="grub-pc,grub-efi"
     APPEND="boot=live components quiet hostname=dilshan-os locales=en_US.UTF-8 keyboard-layouts=us" ;;
   lite)
     CONFIG_DIR="$ROOT/build/live-build-lite"; ARCH=i386; FLAVOUR=686; BOOTLOADERS="syslinux"
+    EXTRA_LB_ARGS=(--firmware-chroot false --firmware-binary false --apt-indices false)
+    FAST=0  # small image: always use xz, the build is short anyway
     APPEND="boot=live components hostname=dilshan-lite locales=en_US.UTF-8 keyboard-layouts=us" ;;
   *) echo "Unknown PROFILE '$PROFILE' (desktop|lite)" >&2; exit 1 ;;
 esac
@@ -61,6 +64,7 @@ lb config \
   --binary-images iso-hybrid \
   --bootloaders "$BOOTLOADERS" \
   --debian-installer none \
+  "${EXTRA_LB_ARGS[@]}" \
   --chroot-squashfs-compression-type "$COMPRESSION" \
   --apt-recommends false \
   --memtest none \

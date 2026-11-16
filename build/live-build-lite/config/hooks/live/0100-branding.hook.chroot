@@ -1,3 +1,7 @@
 #!/bin/sh
 set -e
 printf '%s\n' 'Dilshan OS Lite \n \l' > /etc/issue
+
+# Shrink the image: no docs, man pages or extra locales
+rm -rf /usr/share/doc/* /usr/share/man/* /usr/share/info/* /var/cache/apt/*
+find /usr/share/locale -mindepth 1 -maxdepth 1 ! -name 'en*' -exec rm -rf {} +
