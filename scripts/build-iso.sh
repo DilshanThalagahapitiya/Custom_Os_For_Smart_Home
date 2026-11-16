@@ -26,7 +26,7 @@ install_deps() {
   DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     live-build debootstrap xorriso squashfs-tools mtools dosfstools \
     grub-pc-bin grub-efi-amd64-bin grub-common ca-certificates gnupg \
-    debian-archive-keyring git
+    debian-archive-keyring git syslinux syslinux-common isolinux
 }
 command -v lb >/dev/null || install_deps
 
